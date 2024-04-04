@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nmap Command Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #555;
+        }
+
+        input[type="checkbox"] {
+            margin-bottom: 5px;
+        }
+
+        label {
+            color: #666;
+            margin-left: 5px;
+        }
+
+        input[type="checkbox"]:checked + label {
+            color: #000;
+            font-weight: bold;
+        }
+
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        input[type="checkbox"] + label:before {
+            content: "\2714";
+            border: 1px solid #999;
+            border-radius: 3px;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+            text-align: center;
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"]:checked + label:before {
+            background-color: #333;
+            color: #fff;
+        }
+
+        input[type="checkbox"]:hover + label:before {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <form id="scanForm" action="/scan" method="post">
+        <h1>Target IP or Hostname:</h1>
+        <input type="text" id="target" name="target">
+        <input type="button" value="Start Scan" onclick="startScan()">
+        <br><br>
+        <h3>!!Some Options may not work!!</h3>
+        <div id="scanningPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);">
+            <span onclick="closePopup()" style="position: absolute; top: 10px; right: 10px; cursor: pointer;">&times;</span>
+            <h2>Scanning in progress...</h2>
+            <p>Please wait while the scan is running.</p>
+        </div>
+    
+        <h2>Commanly Used:</h2>
+        <input type="checkbox" id="ss" name="ss" value="-sS">
+        <label for="ss">TCP SYN port scan (-sS)</label><br>
+        
+        <input type="checkbox" id="sc" name="sc" value="-sC">
+        <label for="sc">Scan with default NSE scripts (-sC)</label><br>
+        
+        <input type="checkbox" id="sv" name="sv" value="-sV">
+        <label for="sv">Service/version detection (-sV)</label><br>
+        
+        
+        <input type="checkbox" id="o" name="o" value="-O">
+        <label for="o">Remote OS detection (-O)</label><br>
+        
+      
+        <input type="checkbox" id="vv" name="vv" value="-vv">
+        <label for="vv">Increase verbosity level (-vv)</label><br>
+      
+        <input type="checkbox" id="min-rate" name="min-rate" value="--min-rate=10000">
+        <label for="min-rate">Send packets no slower than 10000 per second (--min-rate=10000)</label><br>
+        
+
+    <!-- <h2>Target Specification:</h2>
+    <input type="checkbox" id="il" name="il" value="-iL">
+    <label for="il">Scan targets from a file (-iL)</label><br>
+    
+    <input type="checkbox" id="ir" name="ir" value="-iR">
+    <label for="ir">Scan random hosts (-iR)</label><br>
+    
+    <input type="checkbox" id="exclude" name="exclude" value="--exclude">
+    <label for="exclude">Exclude listed hosts (--exclude)</label><br> -->
+    
+    <h2>Nmap Scan Techniques:</h2>
+    <input type="checkbox" id="ss" name="ss" value="-sS">
+    <label for="ss">TCP SYN port scan (-sS)</label><br>
+    
+    <input type="checkbox" id="st" name="st" value="-sT">
+    <label for="st">TCP connect port scan (-sT)</label><br>
+    
+    <input type="checkbox" id="su" name="su" value="-sU">
+    <label for="su">UDP port scan (-sU)</label><br>
+    
+    <input type="checkbox" id="sa" name="sa" value="-sA">
+    <label for="sa">TCP ACK port scan (-sA)</label><br>
+    
+    <input type="checkbox" id="sw" name="sw" value="-sW">
+    <label for="sw">TCP Window port scan (-sW)</label><br>
+    
+    <input type="checkbox" id="sm" name="sm" value="-sM">
+    <label for="sm">TCP Maimon port scan (-sM)</label><br>
+    
+    <!-- Add more checkboxes for other scan techniques -->
+    
+    <h2>Host Discovery:</h2>
+    <input type="checkbox" id="sl" name="sl" value="-sL">
+    <label for="sl">List Scan (-sL)</label><br>
+    
+    <input type="checkbox" id="sn" name="sn" value="-sn">
+    <label for="sn">Ping Scan (-sn)</label><br>
+    
+    <input type="checkbox" id="pn" name="pn" value="-Pn">
+    <label for="pn">Disable host discovery (-Pn)</label><br>
+    
+    <input type="checkbox" id="ps" name="ps" value="-PS">
+    <label for="ps">TCP SYN discovery on port x (-PS)</label><br>
+    
+    <input type="checkbox" id="pa" name="pa" value="-PA">
+    <label for="pa">TCP ACK discovery on port x (-PA)</label><br>
+    
+    <input type="checkbox" id="pu" name="pu" value="-PU">
+    <label for="pu">UDP discovery on port x (-PU)</label><br>
+    
+    <input type="checkbox" id="pr" name="pr" value="-PR">
+    <label for="pr">ARP discovery on local network (-PR)</label><br>
+    
+    <input type="checkbox" id="n" name="n" value="-n">
+    <label for="n">Never do DNS resolution (-n)</label><br>
+    
+    <!-- Add more checkboxes for other host discovery options -->
+    
+    <h2>Port Specification:</h2>
+    <input type="checkbox" id="p" name="p" value="-p">
+    <label for="p">Port scan for port x (-p)</label><br>
+    
+    <input type="checkbox" id="pr" name="pr" value="-p-">
+    <label for="pr">Port scan all ports (-p-)</label><br>
+    
+    <input type="checkbox" id="pu" name="pu" value="-p U:">
+    <label for="pu">Port scan multiple UDP ports (-p U:)</label><br>
+    
+    <input type="checkbox" id="pt" name="pt" value="-p T:">
+    <label for="pt">Port scan multiple TCP ports (-p T:)</label><br>
+    
+    <input type="checkbox" id="p" name="p" value="-p-">
+    <label for="p">Port scan all ports (-p-)</label><br>
+    
+    <input type="checkbox" id="pr" name="pr" value="-p-">
+    <label for="pr">Port scan all ports (-p-)</label><br>
+    
+    <!-- Add more checkboxes for other port specification options -->
+    
+    <h2>Service and Version Detection:</h2>
+    <input type="checkbox" id="sv" name="sv" value="-sV">
+    <label for="sv">Service/version detection (-sV)</label><br>
+    
+    <input type="checkbox" id="vi" name="vi" value="--version-intensity">
+    <label for="vi">Set version detection intensity (--version-intensity)</label><br>
+    
+    <input type="checkbox" id="vl" name="vl" value="--version-light">
+    <label for="vl">Enable light mode (--version-light)</label><br>
+    
+    <input type="checkbox" id="va" name="va" value="--version-all">
+    <label for="va">Enable intensity level 9 (--version-all)</label><br>
+    
+    <!-- Add more checkboxes for other service and version detection options -->
+
+    <h2>OS Detection:</h2>
+    <input type="checkbox" id="o" name="o" value="-O">
+    <label for="o">Remote OS detection (-O)</label><br>
+    
+    <input type="checkbox" id="ossl" name="ossl" value="--osscan-limit">
+    <label for="ossl">Limit OS detection (--osscan-limit)</label><br>
+    
+    <input type="checkbox" id="ossg" name="ossg" value="--osscan-guess">
+    <label for="ossg">Guess OS aggressively (--osscan-guess)</label><br>
+    
+    <input type="checkbox" id="maxos" name="maxos" value="--max-os-tries">
+    <label for="maxos">Set maximum number of OS detection tries (--max-os-tries)</label><br>
+    
+    <!-- Add more checkboxes for other OS detection options -->
+
+    <h2>Timing and Performance:</h2>
+    <input type="checkbox" id="t" name="t" value="-T">
+    <label for="t">Set timing template (0-5) (-T)</label><br>
+    
+    <input type="checkbox" id="ht" name="ht" value="--host-timeout">
+    <label for="ht">Give up on target after this long (--host-timeout)</label><br>
+    
+    <input type="checkbox" id="rtt" name="rtt" value="--min-rtt-timeout">
+    <label for="rtt">Specify probe round trip time (--min-rtt-timeout)</label><br>
+    
+    <input type="checkbox" id="mh" name="mh" value="--min-hostgroup">
+    <label for="mh">Parallel host scan group sizes (--min-hostgroup)</label><br>
+    
+    <input type="checkbox" id="mp" name="mp" value="--min-parallelism">
+    <label for="mp">Probe parallelization (--min-parallelism)</label><br>
+    
+    <input type="checkbox" id="mr" name="mr" value="--min-rate">
+    <label for="mr">Send packets no slower than x per second (--min-rate)</label><br>
+    
+    <input type="checkbox" id="maxr" name="maxr" value="--max-rate">
+    <label for="maxr">Send packets no faster than x per second (--max-rate)</label><br>
+    
+    <!-- Add more checkboxes for other timing and performance options -->
+    
+    <h2>NSE Scripts:</h2>
+    <input type="checkbox" id="sc" name="sc" value="-sC">
+    <label for="sc">Scan with default NSE scripts (-sC)</label><br>
+    
+    <input type="checkbox" id="script" name="script" value="--script">
+    <label for="script">Scan with a single script (--script)</label><br>
+    
+    <input type="checkbox" id="scriptargs" name="scriptargs" value="--script-args">
+    <label for="scriptargs">NSE script with arguments (--script-args)</label><br>
+    
+    <!-- Add more checkboxes for other NSE script options -->
+    
+    <h2>Firewall / IDS Evasion and Spoofing:</h2>
+    <input type="checkbox" id="f" name="f" value="-f">
+    <label for="f">Requested scan use tiny fragmented IP packets (-f)</label><br>
+    
+    <input type="checkbox" id="mtu" name="mtu" value="--mtu">
+    <label for="mtu">Set your own offset size (--mtu)</label><br>
+    
+    <input type="checkbox" id="d" name="d" value="-D">
+    <label for="d">Send scans from spoofed IPs (-D)</label><br>
+    
+    <input type="checkbox" id="s" name="s" value="-S">
+    <label for="s">Scan from a spoofed source address (-S)</label><br>
+    
+    <input type="checkbox" id="g" name="g" value="-g">
+    <label for="g">Use given source port number (-g)</label><br>
+    
+    <input type="checkbox" id="proxies" name="proxies" value="--proxies">
+    <label for="proxies">Relay connections through HTTP/SOCKS4 proxies (--proxies)</label><br>
+    
+    <input type="checkbox" id="datalength" name="datalength" value="--data-length">
+    <label for="datalength">Append random data to sent packets (--data-length)</label><br>
+    
+    <!-- Add more checkboxes for other firewall / IDS evasion and spoofing options -->
+    
+    <h2>Output:</h2>
+    <input type="checkbox" id="on" name="on" value="-oN">
+    <label for="on">Normal output to file (-oN)</label><br>
+    
+    <input type="checkbox" id="ox" name="ox" value="-oX">
+    <label for="ox">XML output to file (-oX)</label><br>
+    
+    <input type="checkbox" id="ogrep" name="ogrep" value="-oG">
+    <label for="ogrep">Grepable output to file (-oG)</label><br>
+    
+    <input type="checkbox" id="oa" name="oa" value="-oA">
+    <label for="oa">Output in multiple formats at once (-oA)</label><br>
+    
+    <input type="checkbox" id="v" name="v" value="-v">
+    <label for="v">Increase verbosity level (-v)</label><br>
+    
+    <input type="checkbox" id="d" name="d" value="-d">
+    <label for="d">Increase debugging level (-d)</label><br>
+    
+    <input type="checkbox" id="reason" name="reason" value="--reason">
+    <label for="reason">Display the reason a port is in a particular state (--reason)</label><br>
+    
+    <input type="checkbox" id="open" name="open" value="--open">
+    <label for="open">Only show open ports (--open)</label><br>
+    
+    <input type="checkbox" id="packet-trace" name="packet-trace" value="--packet-trace">
+    <label for="packet-trace">Show all packets sent and received (--packet-trace)</label><br>
+    
+    <input type="checkbox" id="iflist" name="iflist" value="--iflist">
+    <label for="iflist">Show host interfaces and routes (--iflist)</label><br>
+    
+    <input type="checkbox" id="resume" name="resume" value="--resume">
+    <label for="resume">Resume a scan (--resume)</label><br>
+</form>
+
+<script>
+    function startScan() {
+        // Show the scanning pop-up
+        document.getElementById("scanningPopup").style.display = "block";
+
+        // Submit the form after a short delay (you might want to adjust the delay)
+        setTimeout(function() {
+            document.getElementById("scanForm").submit();
+        }, 1000);
+    }
+
+    function closePopup() {
+        // Hide the scanning pop-up
+        document.getElementById("scanningPopup").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
+    <!-- Add more checkboxes for other output options -->
+</body>
+</html>
