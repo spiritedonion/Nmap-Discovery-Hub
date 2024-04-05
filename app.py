@@ -19,6 +19,8 @@ def scan():
     # if 'exclude' in request.form:
     #     options += " --exclude"
        # Commanly Used
+
+
     if 'ss' in request.form:
         options += " -sS"
     if 'sc' in request.form:
@@ -31,8 +33,12 @@ def scan():
         options += " -vv"
     if 'min-rate' in request.form:
         options += " --min-rate=10000"
-    
-    
+    if 'oA' in request.form:
+        options += " -oA"
+    if 'sU' in request.form:
+        options += " -oA"
+
+
     # Nmap Scan Techniques
     if 'ss' in request.form:
         options += " -sS"
@@ -46,7 +52,7 @@ def scan():
         options += " -sW"
     if 'sm' in request.form:
         options += " -sM"
-    
+
     # Host Discovery
     if 'sl' in request.form:
         options += " -sL"
@@ -64,7 +70,7 @@ def scan():
         options += " -PR"
     if 'n' in request.form:
         options += " -n"
-    
+
     # Port Specification
     if 'p' in request.form:
         options += " -p"
@@ -74,7 +80,7 @@ def scan():
         options += " -p U:"
     if 'pt' in request.form:
         options += " -p T:"
-    
+
     # Service and Version Detection
     if 'sv' in request.form:
         options += " -sV"
@@ -84,7 +90,7 @@ def scan():
         options += " --version-light"
     if 'va' in request.form:
         options += " --version-all"
-    
+
     # OS Detection
     if 'o' in request.form:
         options += " -O"
@@ -94,7 +100,7 @@ def scan():
         options += " --osscan-guess"
     if 'maxos' in request.form:
         options += " --max-os-tries"
-    
+
     # Timing and Performance
     if 't' in request.form:
         options += " -T"
@@ -110,7 +116,7 @@ def scan():
         options += " --min-rate"
     if 'maxr' in request.form:
         options += " --max-rate"
-    
+
     # NSE Scripts
     if 'sc' in request.form:
         options += " -sC"
@@ -118,7 +124,7 @@ def scan():
         options += " --script"
     if 'scriptargs' in request.form:
         options += " --script-args"
-    
+
     # Firewall / IDS Evasion and Spoofing
     if 'f' in request.form:
         options += " -f"
@@ -134,7 +140,7 @@ def scan():
         options += " --proxies"
     if 'datalength' in request.form:
         options += " --data-length"
-    
+
     # Output
     if 'on' in request.form:
         options += " -oN"
@@ -158,10 +164,10 @@ def scan():
         options += " --iflist"
     if 'resume' in request.form:
         options += " --resume"
-    
+
     cmd = f"nmap {options} {target}"
     result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-    
+
     return render_template('scan_result.html', result=result.stdout)
 
 if __name__ == '__main__':
