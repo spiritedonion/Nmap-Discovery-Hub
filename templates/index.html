@@ -17,7 +17,8 @@
             color: #555;
         }
 
-        input[type="checkbox"] {
+        
+        /* input[type="checkbox"] {
             margin-bottom: 5px;
         }
 
@@ -55,21 +56,44 @@
 
         input[type="checkbox"]:hover + label:before {
             background-color: #ddd;
-        }
+        } */
+        .loading {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #007bff; /* Change color as needed */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
     </style>
 </head>
 <body>
     <form id="scanForm" action="/scan" method="post">
+
+    <div id="checklist">
         <h1>Target IP or Hostname:</h1>
         <input type="text" id="target" name="target">
         <input type="button" value="Start Scan" onclick="startScan()">
         <br><br>
+
         <h3>!!Some Options may not work!!</h3>
+        
         <div id="scanningPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);">
             <span onclick="closePopup()" style="position: absolute; top: 10px; right: 10px; cursor: pointer;">&times;</span>
             <h2>Scanning in progress...</h2>
             <p>Please wait while the scan is running.</p>
+            <div class="loading"></div>
         </div>
+        
+
     
         <h2>Commanly Used:</h2>
         <input type="checkbox" id="ss" name="ss" value="-sS">
@@ -91,7 +115,21 @@
       
         <input type="checkbox" id="min-rate" name="min-rate" value="--min-rate=10000">
         <label for="min-rate">Send packets no slower than 10000 per second (--min-rate=10000)</label><br>
+
+        <input type="checkbox" id="pr" name="pr" value="-p-">
+        <label for="pr">Port scan all ports (-p-)</label><br>
         
+        <input type="checkbox" id="oA" name="oA" value="-oA">
+        <label for="oA">Output in all formats (-oA)</label><br>
+
+        <input type="checkbox" id="sU" name="sU" value="-sU">
+        <label for="sU">UDP scan (-sU)</label><br>
+
+        <input type="checkbox" id="sA" name="sA" value="-sA">
+        <label for="sA">ACK scan (-sA)</label><br>
+
+        <input type="checkbox" id="Pn" name="Pn" value="-Pn">
+        <label for="Pn">Treat all hosts as online (-Pn)</label><br>
 
     <!-- <h2>Target Specification:</h2>
     <input type="checkbox" id="il" name="il" value="-iL">
@@ -295,6 +333,7 @@
     
     <input type="checkbox" id="resume" name="resume" value="--resume">
     <label for="resume">Resume a scan (--resume)</label><br>
+</div>
 </form>
 
 <script>
