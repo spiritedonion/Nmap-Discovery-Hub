@@ -11,7 +11,7 @@ Before running the application, ensure you have the following dependencies insta
 
 ### Nmap
 #### Debian/Ubuntu:
-```
+```bash
 sudo apt-get install nmap
 ```
 #### Red Hat/CentOS:
