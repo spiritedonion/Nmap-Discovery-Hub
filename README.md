@@ -35,8 +35,10 @@ You can install Flask using pip, Python's package manager:
 ```
 pip install Flask
 ```
-Usage
-```git clone https://github.com/spiritedonion/Nmap-Discovery-Hub.git```
+## Usage
+```
+git clone https://github.com/spiritedonion/Nmap-Discovery-Hub.git
+```
 Install the required dependencies as mentioned above.
 ```
 cd Nmap-Discovery-Hub
