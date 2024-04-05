@@ -1,5 +1,4 @@
-markdown
-Copy code
+
 # Nmap Scan Web Application
 
 This web application allows users to perform network scanning using the Nmap tool. Users can select various Nmap options and provide targets to scan.
